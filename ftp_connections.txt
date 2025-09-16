@@ -1,0 +1,42 @@
+[bu2532 - HCP - Brenso DSA]
+Protocol=sftp
+Host=mcr6wrn19t4pgpyg-sb1m2ls3dv8.ftp.marketingcloudops.com
+User=515012532
+Pwd=BrensoFtp@123
+RemoteFolder=/Export/Operations
+
+[bu2533 - HCP - Arikayce]
+Protocol=sftp
+Host=mcr6wrn19t4pgpyg-sb1m2ls3dv8.ftp.marketingcloudops.com
+User=515012533_4
+Pwd=ArikayceHCP@2024
+RemoteFolder=/Export/Operations
+
+[bu2666 - Patient - Brenso]
+Protocol=sftp
+Host=mc8k7rwq14yzpmj2--y2ms1x3z2y.ftp.marketingcloudops.com
+User=515012666_2
+Pwd=Welcome1234#
+RemoteFolder=/Export/Operations
+
+[bu5531 - Patient - Unbranded]
+Protocol=sftp
+Host=mc8k7rwq14yzpmj2--y2ms1x3z2y.ftp.marketingcloudops.com
+User=515015531_2
+Pwd=3vWcaRkCRt59DyG!
+RemoteFolder=/Export/Operations
+
+[bu6052 - HCP - Brinsupri]
+Protocol=sftp
+Host=mcr6wrn19t4pgpyg-sb1m2ls3dv8.ftp.marketingcloudops.com
+User=515016052_2
+Pwd=3vWcaRkCRt59DyG!
+RemoteFolder=/Export/Operations
+
+[bu7892 - Patient - inLighten]
+Protocol=sftp
+Host=mc8k7rwq14yzpmj2--y2ms1x3z2y.ftp.marketingcloudops.com
+User=515007892_7
+Pwd=nGXsGvc4G@H3AHV
+RemoteFolder=/Export/Operations
+

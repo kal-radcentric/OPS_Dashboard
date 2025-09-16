@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd.exe /c \"cd /d C:\\Users\\neuro\\source\\repos\\OPS_Dashboard && dotnet build\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
