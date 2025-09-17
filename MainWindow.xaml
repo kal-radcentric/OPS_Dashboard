@@ -35,6 +35,15 @@
                             IsEnabled="{Binding IsDownloadEnabled}"
                             Command="{Binding DownloadFilesCommand}"/>
 
+                    <Button Name="btnPauseDownload"
+                            Content="{Binding DownloadPauseButtonText}"
+                            Width="150"
+                            Height="35"
+                            FontSize="14"
+                            Margin="10,0,0,0"
+                            IsEnabled="{Binding IsDownloading}"
+                            Command="{Binding PauseDownloadCommand}"/>
+
                     <Button Name="btnCancelDownload"
                             Content="Cancel Download"
                             Width="150"
@@ -94,6 +103,15 @@
                             FontSize="14"
                             IsEnabled="{Binding IsProcessingEnabled}"
                             Command="{Binding ProcessFilesCommand}"/>
+
+                    <Button Name="btnPauseProcessing"
+                            Content="{Binding ProcessingPauseButtonText}"
+                            Width="150"
+                            Height="35"
+                            FontSize="14"
+                            Margin="10,0,0,0"
+                            IsEnabled="{Binding IsProcessing}"
+                            Command="{Binding PauseProcessingCommand}"/>
 
                     <Button Name="btnCancelProcessing"
                             Content="Cancel Processing"

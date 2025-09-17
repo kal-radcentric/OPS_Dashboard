@@ -39,6 +39,8 @@ namespace OPS_Dashboard.Services
         public event EventHandler<DownloadProgressEventArgs>? ProgressChanged;
         public event EventHandler<string>? LogMessage;
 
+        public bool IsPaused { get; set; }
+
         public FtpDownloadService()
         {
             if (!Directory.Exists(_localDirectory))
@@ -84,6 +86,12 @@ namespace OPS_Dashboard.Services
                         return false;
                     }
 
+                    // Check for pause
+                    while (IsPaused && !cancellationToken.IsCancellationRequested)
+                    {
+                        await Task.Delay(100, cancellationToken);
+                    }
+
                     var filesForThisBu = requiredFiles.Where(f => f.Contains($"_{connection.BuId}_")).ToList();
                     if (filesForThisBu.Count == 0)
                     {
@@ -109,6 +117,12 @@ namespace OPS_Dashboard.Services
                             foreach (var requiredFile in filesForThisBu)
                             {
                                 if (cancellationToken.IsCancellationRequested) break;
+
+                                // Check for pause
+                                while (IsPaused && !cancellationToken.IsCancellationRequested)
+                                {
+                                    await Task.Delay(100, cancellationToken);
+                                }
 
                                 currentFileIndex++;
                                 var fileName = Path.GetFileName(requiredFile);
@@ -186,6 +200,12 @@ namespace OPS_Dashboard.Services
                         return;
                     }
 
+                    // Check for pause
+                    while (IsPaused && !cancellationToken.IsCancellationRequested)
+                    {
+                        await Task.Delay(100, cancellationToken);
+                    }
+
                     var fileName = Path.GetFileName(filePath);
                     try
                     {
@@ -243,6 +263,12 @@ namespace OPS_Dashboard.Services
 
                     while (!downloadTask.IsCompleted && !cancellationToken.IsCancellationRequested)
                     {
+                        // Check for pause
+                        while (client.IsConnected && IsPaused && !cancellationToken.IsCancellationRequested)
+                        {
+                            await Task.Delay(100, cancellationToken);
+                        }
+
                         await Task.Delay(100);
 
                         var currentBytes = fileStream.Position;

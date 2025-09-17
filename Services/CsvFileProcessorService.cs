@@ -27,6 +27,8 @@ namespace OPS_Dashboard.Services
         public event EventHandler<ProcessingProgressEventArgs>? ProgressChanged;
         public event EventHandler<string>? LogMessage;
 
+        public bool IsPaused { get; set; }
+
         public CsvFileProcessorService()
         {
             // Use connection string from Program.cs
@@ -71,6 +73,12 @@ namespace OPS_Dashboard.Services
                     {
                         LogMessage?.Invoke(this, "Processing cancelled by user");
                         return false;
+                    }
+
+                    // Check for pause
+                    while (IsPaused && !cancellationToken.IsCancellationRequested)
+                    {
+                        await Task.Delay(100, cancellationToken);
                     }
 
                     currentFileIndex++;
@@ -130,6 +138,12 @@ namespace OPS_Dashboard.Services
 
                         try
                         {
+                            // Check for pause before execution
+                            while (IsPaused && !cancellationToken.IsCancellationRequested)
+                            {
+                                await Task.Delay(100, cancellationToken);
+                            }
+
                             await cmd.ExecuteNonQueryAsync(cancellationToken);
                             LogMessage?.Invoke(this, "Successfully executed sp_truncate_import_tables");
                         }
@@ -157,6 +171,12 @@ namespace OPS_Dashboard.Services
 
                         try
                         {
+                            // Check for pause before execution
+                            while (IsPaused && !cancellationToken.IsCancellationRequested)
+                            {
+                                await Task.Delay(100, cancellationToken);
+                            }
+
                             await cmd.ExecuteNonQueryAsync(cancellationToken);
                             LogMessage?.Invoke(this, "Successfully executed sp_truncate_sfmc_tables");
                         }
@@ -199,6 +219,12 @@ namespace OPS_Dashboard.Services
 
                         try
                         {
+                            // Check for pause before execution
+                            while (IsPaused && !cancellationToken.IsCancellationRequested)
+                            {
+                                await Task.Delay(100, cancellationToken);
+                            }
+
                             await cmd.ExecuteNonQueryAsync(cancellationToken);
                             LogMessage?.Invoke(this, "Successfully executed sp_bu_to_sfmc_MasterConsolidation");
                             ReportProgress("Master Consolidation", 1, 1, 100, "Master consolidation completed");

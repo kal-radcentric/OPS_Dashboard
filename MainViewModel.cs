@@ -23,6 +23,8 @@ namespace OPS_Dashboard
         private string _downloadLog = "";
         private bool _isDownloading;
         private bool _isDownloadEnabled = true;
+        private bool _isDownloadPaused;
+        private string _downloadPauseButtonText = "Pause Download";
 
         // Processing properties
         private string _processingStatus = "Ready";
@@ -31,6 +33,8 @@ namespace OPS_Dashboard
         private string _processingLog = "";
         private bool _isProcessing;
         private bool _isProcessingEnabled = true;
+        private bool _isProcessingPaused;
+        private string _processingPauseButtonText = "Pause Processing";
 
         // General properties
         private string _statusMessage = "Application ready";
@@ -50,15 +54,19 @@ namespace OPS_Dashboard
 
             // Initialize commands
             DownloadFilesCommand = new AsyncRelayCommand(DownloadFilesAsync);
+            PauseDownloadCommand = new RelayCommand(PauseDownload);
             CancelDownloadCommand = new RelayCommand(CancelDownload);
             ProcessFilesCommand = new AsyncRelayCommand(ProcessFilesAsync);
+            PauseProcessingCommand = new RelayCommand(PauseProcessing);
             CancelProcessingCommand = new RelayCommand(CancelProcessing);
         }
 
         // Commands
         public ICommand DownloadFilesCommand { get; }
+        public ICommand PauseDownloadCommand { get; }
         public ICommand CancelDownloadCommand { get; }
         public ICommand ProcessFilesCommand { get; }
+        public ICommand PauseProcessingCommand { get; }
         public ICommand CancelProcessingCommand { get; }
 
         // Download Properties
@@ -115,6 +123,22 @@ namespace OPS_Dashboard
 
         public bool IsDownloadEnabled => !_isDownloading;
 
+        public bool IsDownloadPaused
+        {
+            get => _isDownloadPaused;
+            set
+            {
+                _isDownloadPaused = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DownloadPauseButtonText));
+            }
+        }
+
+        public string DownloadPauseButtonText
+        {
+            get => _isDownloadPaused ? "Continue Download" : "Pause Download";
+        }
+
         // Processing Properties
         public string ProcessingStatus
         {
@@ -168,6 +192,22 @@ namespace OPS_Dashboard
         }
 
         public bool IsProcessingEnabled => !_isProcessing && !_isDownloading;
+
+        public bool IsProcessingPaused
+        {
+            get => _isProcessingPaused;
+            set
+            {
+                _isProcessingPaused = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(ProcessingPauseButtonText));
+            }
+        }
+
+        public string ProcessingPauseButtonText
+        {
+            get => _isProcessingPaused ? "Continue Processing" : "Pause Processing";
+        }
 
         // General Properties
         public string StatusMessage
@@ -239,6 +279,25 @@ namespace OPS_Dashboard
             StatusMessage = "Cancelling download...";
         }
 
+        private void PauseDownload()
+        {
+            IsDownloadPaused = !IsDownloadPaused;
+            _ftpService.IsPaused = IsDownloadPaused;
+
+            if (IsDownloadPaused)
+            {
+                DownloadStatus = "Paused";
+                StatusMessage = "Download paused by user";
+                AppendToDownloadLog("Download paused by user");
+            }
+            else
+            {
+                DownloadStatus = "Downloading...";
+                StatusMessage = "Download resumed";
+                AppendToDownloadLog("Download resumed by user");
+            }
+        }
+
         // Processing Methods
         private async Task ProcessFilesAsync()
         {
@@ -286,6 +345,25 @@ namespace OPS_Dashboard
         {
             _processingCts?.Cancel();
             StatusMessage = "Cancelling processing...";
+        }
+
+        private void PauseProcessing()
+        {
+            IsProcessingPaused = !IsProcessingPaused;
+            _processorService.IsPaused = IsProcessingPaused;
+
+            if (IsProcessingPaused)
+            {
+                ProcessingStatus = "Paused";
+                StatusMessage = "Processing paused by user";
+                AppendToProcessingLog("Processing paused by user");
+            }
+            else
+            {
+                ProcessingStatus = "Processing...";
+                StatusMessage = "Processing resumed";
+                AppendToProcessingLog("Processing resumed by user");
+            }
         }
 
         // Event Handlers
